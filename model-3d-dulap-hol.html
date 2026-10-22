@@ -8,8 +8,8 @@
 <style>
 :root {
   --bg: #EDF0EE; --sheet: #F8FAF9; --ink: #1B2730; --ink2: #4F5D67; --line: #8A97A0; --rule: #CDD5D9;
-  --stage: #E4E9E7; --wall: #D5DCD9; --floor: #C3CCC8; --pal: #D9D2C3; --plinth: #B9B3A5; --door: #E9E4D8;
-  --panel: #CFC7B5; --pfl: #A99F8A; --hw: #B0630A; --edge: #3A4650;
+  --stage: #E4E9E7; --wall: #D5DCD9; --floor: #C3CCC8; --pal: #D9D2C3; --plinth: #C4B79F; --door: #DCCFB8;
+  --panel: #CFC7B5; --pfl: #A99F8A; --hw: #B0630A; --edge: #3A4650; --velv: #5C7D74;
   --f-disp: 'Barlow Condensed', 'Arial Narrow', sans-serif;
   --f-body: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
@@ -17,14 +17,14 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #11171B; --sheet: #171F25; --ink: #E3E9ED; --ink2: #98A6B0; --line: #5C6A74; --rule: #2A353D;
-    --stage: #0E1418; --wall: #1D272D; --floor: #151D22; --pal: #8E8878; --plinth: #6C675B; --door: #A39D8C;
-    --panel: #7D7665; --pfl: #5E5848; --hw: #E5A24E; --edge: #0B1013; color-scheme: dark;
+    --stage: #0E1418; --wall: #1D272D; --floor: #151D22; --pal: #8E8878; --plinth: #7A705C; --door: #9C9078;
+    --panel: #7D7665; --pfl: #5E5848; --hw: #E5A24E; --edge: #0B1013; --velv: #3E5E55; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #11171B; --sheet: #171F25; --ink: #E3E9ED; --ink2: #98A6B0; --line: #5C6A74; --rule: #2A353D;
   --stage: #0E1418; --wall: #1D272D; --floor: #151D22; --pal: #8E8878; --plinth: #6C675B; --door: #A39D8C;
-  --panel: #7D7665; --pfl: #5E5848; --hw: #E5A24E; --edge: #0B1013; color-scheme: dark;
+  --panel: #7D7665; --pfl: #5E5848; --hw: #E5A24E; --edge: #0B1013; --velv: #3E5E55; color-scheme: dark;
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 400 15px/1.5 var(--f-body);
@@ -73,17 +73,17 @@ canvas:active { cursor: grabbing; }
     <div class="hint">Trage pentru a roti, rotița sau ciupitul pentru zoom, click pe o ușă pentru a o deschide.</div>
   </div>
   <ul class="legend">
-    <li><span class="sw" style="background:var(--pal)"></span>PAL 18 mm</li>
-    <li><span class="sw" style="background:var(--door)"></span>uși</li>
-    <li><span class="sw" style="background:var(--panel)"></span>panou cuier</li>
+    <li><span class="sw" style="background:var(--pal)"></span>PAL corp 18 mm</li>
+    <li><span class="sw" style="background:var(--door)"></span>PAL fronturi (uși, plinte, panou, poliță suspendat)</li>
+    <li><span class="sw" style="background:var(--velv)"></span>burete + catifea (panou, pernă)</li>
     <li><span class="sw" style="background:var(--pfl)"></span>spate PFL 3 mm</li>
     <li><span class="sw" style="background:var(--hw)"></span>bare, plăcuțe de balama, cârlige</li>
   </ul>
-  <p class="note">Dimensiuni: 1500 × 2360 × 503 mm. Balamalele sunt pe stânga, ușile se deschid la 110°. Poziția barelor și a cârligelor e orientativă. Modelul arată piesele așa cum sunt în lista de debitare, fără cant și fără mânere.</p>
+  <p class="note">v3 · Dimensiuni: 1500 × 2360 × 503 mm. Banca are 420 mm, cu pernă (placă + burete 20 mm + catifea) ajunge la ~459 mm. Balamalele sunt pe stânga, ușile se deschid la 110°. Poziția barelor și a cârligelor e orientativă. Modelul arată piesele așa cum sunt în lista de debitare, fără cant și fără mânere.</p>
 </div>
 <script>
 (function () {
-  var D = {"hingeTall": [186, 698, 1210, 1722, 2234], "hingeBench": [155, 347], "hingeSusp": [1852, 2268], "c1ShelfBot": 2074, "c1ShelfTop": 2092, "rodUp": 2020, "rodLow": 1060, "shelfBot": [300.5, 556.5, 812.5, 1068.5, 1324.5, 1580.5, 1836.5, 2092.5]};
+  var D = {"hingeTall": [186, 698, 1210, 1722, 2234], "hingeBench": [155, 315], "hingeSusp": [1852, 2268], "c1ShelfBot": 2074, "c1ShelfTop": 2092, "rodUp": 2020, "rodLow": 1060, "shelfBot": [300.5, 556.5, 812.5, 1068.5, 1324.5, 1580.5, 1836.5, 2092.5], "benchH": 420, "panelH": 1340, "doorBH": 356, "ssBot": 2060.5, "cushZ0": 23};
   var cv = document.getElementById('cv'), ctx = cv.getContext('2d'), stage = document.getElementById('stage');
   var T = 18;
   // ---------------------------------------------------------------- parts
@@ -97,7 +97,7 @@ canvas:active { cursor: grabbing; }
     box(x0 + 482, 0, 3, x0 + 500, 2360, 483, 'pal', m);
     box(x0 + T, 60, 3, x0 + 482, 78, 483, 'pal', m);
     box(x0 + T, 2342, 3, x0 + 482, 2360, 483, 'pal', m);
-    box(x0 + T, 0, 465, x0 + 482, 60, 483, 'plinth', m);
+    box(x0 + T, 0, 465, x0 + 482, 60, 483, 'front', m);
     box(x0 + 2, 2, 0, x0 + 498, 2358, 3, 'pfl', m);
     D.hingeTall.forEach(function (h) { box(x0 + T, h - 8, 440, x0 + T + 5, h + 8, 452, 'hw', m); });
   }
@@ -107,19 +107,24 @@ canvas:active { cursor: grabbing; }
   tall(1, 500);
   D.shelfBot.forEach(function (b) { box(519, b, 23, 981, b + T, 463, 'pal', 1); });
   // module 3: bench, panel, suspended
-  box(1000, 0, 3, 1018, 460, 483, 'pal', 2); box(1482, 0, 3, 1500, 460, 483, 'pal', 2);
-  box(1018, 60, 3, 1482, 78, 483, 'pal', 2); box(1018, 442, 3, 1482, 460, 483, 'pal', 2);
-  box(1018, 0, 465, 1482, 60, 483, 'plinth', 2);
-  box(1002, 2, 0, 1498, 458, 3, 'pfl', 2);
+  var BH = D.benchH, PT = D.benchH + D.panelH;
+  box(1000, 0, 3, 1018, BH, 483, 'pal', 2); box(1482, 0, 3, 1500, BH, 483, 'pal', 2);
+  box(1018, 60, 3, 1482, 78, 483, 'pal', 2); box(1018, BH - T, 3, 1482, BH, 483, 'pal', 2);
+  box(1018, 0, 465, 1482, 60, 483, 'front', 2);
+  box(1002, 2, 0, 1498, BH - 2, 3, 'pfl', 2);
   D.hingeBench.forEach(function (h) { box(1018, h - 8, 440, 1023, h + 8, 452, 'hw', 2); });
-  box(1000, 460, 0, 1500, 1760, 18, 'panel', 2);
-  [1125, 1250, 1375].forEach(function (x) { box(x - 6, 1554, 18, x + 6, 1566, 40, 'hw', 2); });
-  box(1000, 1760, 3, 1018, 2360, 483, 'pal', 2); box(1482, 1760, 3, 1500, 2360, 483, 'pal', 2);
-  box(1018, 1760, 3, 1482, 1778, 483, 'pal', 2); box(1018, 2342, 3, 1482, 2360, 483, 'pal', 2);
-  box(1002, 1762, 0, 1498, 2358, 3, 'pfl', 2);
+  box(1000, BH, 0, 1500, PT, 18, 'front', 2);                  // panou
+  box(1000, BH, 18, 1500, PT, 38, 'velv', 2);                 // burete + catifea
+  box(1000, BH, D.cushZ0, 1500, BH + T, 503, 'front', 2);      // placa pernei
+  box(1000, BH + T, D.cushZ0, 1500, BH + T + 20, 503, 'velv', 2);
+  [1125, 1250, 1375].forEach(function (x) { box(x - 6, 1554, 38, x + 6, 1566, 60, 'hw', 2); });
+  box(1000, PT, 3, 1018, 2360, 483, 'pal', 2); box(1482, PT, 3, 1500, 2360, 483, 'pal', 2);
+  box(1018, PT, 3, 1482, PT + T, 483, 'pal', 2); box(1018, 2342, 3, 1482, 2360, 483, 'pal', 2);
+  box(1002, PT + 2, 0, 1498, 2358, 3, 'pfl', 2);
+  box(1019, D.ssBot, 23, 1481, D.ssBot + T, 463, 'front', 2);  // polita mobila suspendat
   D.hingeSusp.forEach(function (h) { box(1018, h - 8, 440, 1023, h + 8, 452, 'hw', 2); });
   // doors, hinge on the left edge
-  var doorDefs = [[2, 62, 498, 2358, 0], [502, 62, 998, 2358, 1], [1002, 62, 1498, 440, 2], [1002, 1762, 1498, 2358, 2]];
+  var doorDefs = [[2, 62, 498, 2358, 0], [502, 62, 998, 2358, 1], [1002, 62, 1498, 62 + D.doorBH, 2], [1002, 1762, 1498, 2358, 2]];
   doorDefs.forEach(function (d, i) { box(d[0], d[1], 485, d[2], d[3], 503, 'door', d[4], i); });
   var ang = [0, 0, 0, 0], tgt = [0, 0, 0, 0], OPEN = 110 * Math.PI / 180;
   var st = { pfl: true, wall: true, hide: false, gap: 0 };
@@ -129,7 +134,7 @@ canvas:active { cursor: grabbing; }
   function hex(v) { v = v.trim(); if (v[0] === '#') { if (v.length === 4) v = '#' + v[1] + v[1] + v[2] + v[2] + v[3] + v[3]; return [parseInt(v.substr(1, 2), 16), parseInt(v.substr(3, 2), 16), parseInt(v.substr(5, 2), 16)]; } var m = v.match(/\d+/g); return m ? [+m[0], +m[1], +m[2]] : [128, 128, 128]; }
   function readTheme() {
     css = getComputedStyle(document.documentElement);
-    ['stage', 'wall', 'floor', 'pal', 'plinth', 'door', 'panel', 'pfl', 'hw', 'edge'].forEach(function (k) { pal[k] = hex(css.getPropertyValue('--' + k)); });
+    ['stage', 'wall', 'floor', 'pal', 'plinth', 'door', 'panel', 'pfl', 'hw', 'edge', 'velv'].forEach(function (k) { pal[k] = hex(css.getPropertyValue('--' + k)); });
   }
   readTheme();
   if (window.matchMedia) { try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { readTheme(); draw(); }); } catch (e) {} }
@@ -196,7 +201,7 @@ canvas:active { cursor: grabbing; }
       var off = p.mod * st.gap, c = corners(p, off);
       var bc = [0, 0, 0];
       c.forEach(function (q) { bc[0] += q[0] / 8; bc[1] += q[1] / 8; bc[2] += q[2] / 8; });
-      var col = pal[p.kind];
+      var col = pal[p.kind === 'front' ? 'door' : p.kind];
       FACES.forEach(function (fi) {
         var v = fi.map(function (i) { return c[i]; });
         var e1 = sub(v[1], v[0]), e2 = sub(v[3], v[0]), n = norm(cross(e1, e2));
