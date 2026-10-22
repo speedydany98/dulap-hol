@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dulap hol 3D</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500&family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #EDF0EE; --sheet: #F8FAF9; --ink: #1B2730; --ink2: #4F5D67; --line: #8A97A0; --rule: #CDD5D9;
+  --stage: #E4E9E7; --wall: #D5DCD9; --floor: #C3CCC8; --pal: #D9D2C3; --plinth: #B9B3A5; --door: #E9E4D8;
+  --panel: #CFC7B5; --pfl: #A99F8A; --hw: #B0630A; --edge: #3A4650;
+  --f-disp: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --f-body: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11171B; --sheet: #171F25; --ink: #E3E9ED; --ink2: #98A6B0; --line: #5C6A74; --rule: #2A353D;
+    --stage: #0E1418; --wall: #1D272D; --floor: #151D22; --pal: #8E8878; --plinth: #6C675B; --door: #A39D8C;
+    --panel: #7D7665; --pfl: #5E5848; --hw: #E5A24E; --edge: #0B1013; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11171B; --sheet: #171F25; --ink: #E3E9ED; --ink2: #98A6B0; --line: #5C6A74; --rule: #2A353D;
+  --stage: #0E1418; --wall: #1D272D; --floor: #151D22; --pal: #8E8878; --plinth: #6C675B; --door: #A39D8C;
+  --panel: #7D7665; --pfl: #5E5848; --hw: #E5A24E; --edge: #0B1013; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 15px/1.5 var(--f-body);
+  padding-block: 24px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 16px; }
+.kicker { font: 500 12px var(--f-mono); letter-spacing: .09em; text-transform: uppercase; color: var(--ink2); }
+h1 { margin: 4px 0 0; font: 600 clamp(36px, 7vw, 60px)/.95 var(--f-disp); }
+.stage { position: relative; background: var(--stage); border: 1px solid var(--rule); height: clamp(420px, 72vh, 760px); touch-action: none; min-width: 0; }
+canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: grab; }
+canvas:active { cursor: grabbing; }
+.hint { position: absolute; left: 12px; bottom: 10px; font: 400 12px var(--f-mono); color: var(--ink2); pointer-events: none; max-width: calc(100% - 24px); }
+.ctl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ctl button { font: 500 12px var(--f-mono); letter-spacing: .04em; color: var(--ink); background: transparent; border: 1px solid var(--line); padding: 8px 12px; cursor: pointer; border-radius: 2px; }
+.ctl button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+.ctl button:focus-visible, input:focus-visible { outline: 2px solid var(--hw); outline-offset: 2px; }
+.sep { width: 1px; height: 24px; background: var(--rule); }
+.ctl label { font: 500 12px var(--f-mono); color: var(--ink2); display: flex; align-items: center; gap: 8px; }
+.ctl input[type=range] { width: 140px; accent-color: var(--hw); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 0; list-style: none; font-size: 13px; color: var(--ink2); }
+.legend li { display: flex; align-items: center; gap: 7px; }
+.sw { width: 16px; height: 11px; border: 1px solid var(--edge); display: inline-block; }
+.note { margin: 0; color: var(--ink2); font-size: 14px; max-width: 75ch; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div>
+    <div class="kicker">Casa cumnata · model 3D din cotele de debitare</div>
+    <h1>Dulap hol</h1>
+  </div>
+  <div class="ctl" role="group" aria-label="Comenzi">
+    <button type="button" id="b-doors" aria-pressed="false">Deschide ușile</button>
+    <button type="button" id="b-hide" aria-pressed="false">Ascunde ușile</button>
+    <button type="button" id="b-pfl" aria-pressed="true">Spate PFL</button>
+    <button type="button" id="b-wall" aria-pressed="true">Perete și podea</button>
+    <span class="sep"></span>
+    <button type="button" id="v-front">Față</button>
+    <button type="button" id="v-iso">Izometric</button>
+    <button type="button" id="v-side">Lateral</button>
+    <span class="sep"></span>
+    <label>Distanță între corpuri <input type="range" id="gap" min="0" max="200" value="0"></label>
+  </div>
+  <div class="stage" id="stage">
+    <canvas id="cv" aria-label="Model 3D al dulapului de hol, se rotește cu degetul sau mouse-ul"></canvas>
+    <div class="hint">Trage pentru a roti, rotița sau ciupitul pentru zoom, click pe o ușă pentru a o deschide.</div>
+  </div>
+  <ul class="legend">
+    <li><span class="sw" style="background:var(--pal)"></span>PAL 18 mm</li>
+    <li><span class="sw" style="background:var(--door)"></span>uși</li>
+    <li><span class="sw" style="background:var(--panel)"></span>panou cuier</li>
+    <li><span class="sw" style="background:var(--pfl)"></span>spate PFL 3 mm</li>
+    <li><span class="sw" style="background:var(--hw)"></span>bare, plăcuțe de balama, cârlige</li>
+  </ul>
+  <p class="note">Dimensiuni: 1500 × 2360 × 503 mm. Balamalele sunt pe stânga, ușile se deschid la 110°. Poziția barelor și a cârligelor e orientativă. Modelul arată piesele așa cum sunt în lista de debitare, fără cant și fără mânere.</p>
+</div>
+<script>
+(function () {
+  var D = {"hingeTall": [186, 698, 1210, 1722, 2234], "hingeBench": [155, 347], "hingeSusp": [1852, 2268], "c1ShelfBot": 2074, "c1ShelfTop": 2092, "rodUp": 2020, "rodLow": 1060, "shelfBot": [300.5, 556.5, 812.5, 1068.5, 1324.5, 1580.5, 1836.5, 2092.5]};
+  var cv = document.getElementById('cv'), ctx = cv.getContext('2d'), stage = document.getElementById('stage');
+  var T = 18;
+  // ---------------------------------------------------------------- parts
+  // world: x right, y up, z toward viewer; wall at z = 0
+  var parts = [];
+  function box(x0, y0, z0, x1, y1, z1, kind, mod, door) {
+    parts.push({ a: [x0, y0, z0], b: [x1, y1, z1], kind: kind, mod: mod, door: door === undefined ? -1 : door });
+  }
+  function tall(m, x0) {
+    box(x0, 0, 3, x0 + T, 2360, 483, 'pal', m);
+    box(x0 + 482, 0, 3, x0 + 500, 2360, 483, 'pal', m);
+    box(x0 + T, 60, 3, x0 + 482, 78, 483, 'pal', m);
+    box(x0 + T, 2342, 3, x0 + 482, 2360, 483, 'pal', m);
+    box(x0 + T, 0, 465, x0 + 482, 60, 483, 'plinth', m);
+    box(x0 + 2, 2, 0, x0 + 498, 2358, 3, 'pfl', m);
+    D.hingeTall.forEach(function (h) { box(x0 + T, h - 8, 440, x0 + T + 5, h + 8, 452, 'hw', m); });
+  }
+  tall(0, 0);
+  box(18, D.c1ShelfBot, 3, 482, D.c1ShelfTop, 483, 'pal', 0);
+  [D.rodUp, D.rodLow].forEach(function (y) { box(25, y - 12, 230, 475, y + 12, 254, 'hw', 0); });
+  tall(1, 500);
+  D.shelfBot.forEach(function (b) { box(519, b, 23, 981, b + T, 463, 'pal', 1); });
+  // module 3: bench, panel, suspended
+  box(1000, 0, 3, 1018, 460, 483, 'pal', 2); box(1482, 0, 3, 1500, 460, 483, 'pal', 2);
+  box(1018, 60, 3, 1482, 78, 483, 'pal', 2); box(1018, 442, 3, 1482, 460, 483, 'pal', 2);
+  box(1018, 0, 465, 1482, 60, 483, 'plinth', 2);
+  box(1002, 2, 0, 1498, 458, 3, 'pfl', 2);
+  D.hingeBench.forEach(function (h) { box(1018, h - 8, 440, 1023, h + 8, 452, 'hw', 2); });
+  box(1000, 460, 0, 1500, 1760, 18, 'panel', 2);
+  [1125, 1250, 1375].forEach(function (x) { box(x - 6, 1554, 18, x + 6, 1566, 40, 'hw', 2); });
+  box(1000, 1760, 3, 1018, 2360, 483, 'pal', 2); box(1482, 1760, 3, 1500, 2360, 483, 'pal', 2);
+  box(1018, 1760, 3, 1482, 1778, 483, 'pal', 2); box(1018, 2342, 3, 1482, 2360, 483, 'pal', 2);
+  box(1002, 1762, 0, 1498, 2358, 3, 'pfl', 2);
+  D.hingeSusp.forEach(function (h) { box(1018, h - 8, 440, 1023, h + 8, 452, 'hw', 2); });
+  // doors, hinge on the left edge
+  var doorDefs = [[2, 62, 498, 2358, 0], [502, 62, 998, 2358, 1], [1002, 62, 1498, 440, 2], [1002, 1762, 1498, 2358, 2]];
+  doorDefs.forEach(function (d, i) { box(d[0], d[1], 485, d[2], d[3], 503, 'door', d[4], i); });
+  var ang = [0, 0, 0, 0], tgt = [0, 0, 0, 0], OPEN = 110 * Math.PI / 180;
+  var st = { pfl: true, wall: true, hide: false, gap: 0 };
+
+  // ---------------------------------------------------------------- colors
+  var css = getComputedStyle(document.documentElement), pal = {};
+  function hex(v) { v = v.trim(); if (v[0] === '#') { if (v.length === 4) v = '#' + v[1] + v[1] + v[2] + v[2] + v[3] + v[3]; return [parseInt(v.substr(1, 2), 16), parseInt(v.substr(3, 2), 16), parseInt(v.substr(5, 2), 16)]; } var m = v.match(/\d+/g); return m ? [+m[0], +m[1], +m[2]] : [128, 128, 128]; }
+  function readTheme() {
+    css = getComputedStyle(document.documentElement);
+    ['stage', 'wall', 'floor', 'pal', 'plinth', 'door', 'panel', 'pfl', 'hw', 'edge'].forEach(function (k) { pal[k] = hex(css.getPropertyValue('--' + k)); });
+  }
+  readTheme();
+  if (window.matchMedia) { try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { readTheme(); draw(); }); } catch (e) {} }
+  new MutationObserver(function () { readTheme(); draw(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  // ---------------------------------------------------------------- camera
+  var cam = { yaw: 0.45, pitch: 0.2, dist: 4300, tx: 750, ty: 1150, tz: 250 };
+  var W = 1, H = 1, dpr = 1, FOV = 0.9;
+  function resize() {
+    dpr = window.devicePixelRatio || 1;
+    var r = stage.getBoundingClientRect();
+    W = Math.max(1, r.width); H = Math.max(1, r.height);
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    draw();
+  }
+  var basis;
+  function setBasis() {
+    var cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch), sy = Math.sin(cam.yaw), cy = Math.cos(cam.yaw);
+    var pos = [cam.tx + cam.dist * sy * cp, cam.ty + cam.dist * sp, cam.tz + cam.dist * cy * cp];
+    var f = norm([cam.tx - pos[0], cam.ty - pos[1], cam.tz - pos[2]]);
+    var r = norm(cross(f, [0, 1, 0]));
+    var u = cross(r, f);
+    basis = { pos: pos, f: f, r: r, u: u, focal: (Math.min(W, H) * 0.5) / Math.tan(FOV / 2) };
+  }
+  function norm(v) { var l = Math.hypot(v[0], v[1], v[2]) || 1; return [v[0] / l, v[1] / l, v[2] / l]; }
+  function cross(a, b) { return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]; }
+  function dot(a, b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
+  function sub(a, b) { return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]; }
+  function proj(p) {
+    var v = sub(p, basis.pos), zc = dot(v, basis.f);
+    var k = basis.focal / Math.max(zc, 50);
+    return [W / 2 + dot(v, basis.r) * k, H / 2 - dot(v, basis.u) * k, zc];
+  }
+
+  // ---------------------------------------------------------------- faces
+  var LIGHT = norm([-0.45, 0.8, 0.65]);
+  var doorFront = [];
+  function corners(p, off) {
+    var a = p.a, b = p.b, x0 = a[0] + off, x1 = b[0] + off;
+    var c = [[x0, a[1], a[2]], [x1, a[1], a[2]], [x1, b[1], a[2]], [x0, b[1], a[2]], [x0, a[1], b[2]], [x1, a[1], b[2]], [x1, b[1], b[2]], [x0, b[1], b[2]]];
+    if (p.door >= 0 && ang[p.door] !== 0) {
+      var th = -ang[p.door], s = Math.sin(th), co = Math.cos(th), px = x0, pz = a[2];
+      c = c.map(function (q) { var dx = q[0] - px, dz = q[2] - pz; return [px + dx * co + dz * s, q[1], pz - dx * s + dz * co]; });
+    }
+    return c;
+  }
+  var FACES = [[0, 3, 2, 1], [4, 5, 6, 7], [0, 4, 7, 3], [1, 2, 6, 5], [0, 1, 5, 4], [3, 7, 6, 2]];
+  function shade(col, n) {
+    var l = 0.52 + 0.48 * Math.max(0, dot(n, LIGHT));
+    return 'rgb(' + Math.round(col[0] * l) + ',' + Math.round(col[1] * l) + ',' + Math.round(col[2] * l) + ')';
+  }
+  function draw() {
+    if (!basis || true) setBasis();
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = 'rgb(' + pal.stage.join(',') + ')';
+    ctx.fillRect(0, 0, W, H);
+    var camPos = basis.pos;
+    if (st.wall) drawRoom();
+    var list = [];
+    doorFront = [];
+    parts.forEach(function (p) {
+      if (p.kind === 'pfl' && !st.pfl) return;
+      if (p.kind === 'door' && st.hide) return;
+      var off = p.mod * st.gap, c = corners(p, off);
+      var bc = [0, 0, 0];
+      c.forEach(function (q) { bc[0] += q[0] / 8; bc[1] += q[1] / 8; bc[2] += q[2] / 8; });
+      var col = pal[p.kind];
+      FACES.forEach(function (fi) {
+        var v = fi.map(function (i) { return c[i]; });
+        var e1 = sub(v[1], v[0]), e2 = sub(v[3], v[0]), n = norm(cross(e1, e2));
+        var fc = [(v[0][0] + v[2][0]) / 2, (v[0][1] + v[2][1]) / 2, (v[0][2] + v[2][2]) / 2];
+        if (dot(n, sub(fc, bc)) < 0) n = [-n[0], -n[1], -n[2]];
+        if (dot(n, sub(camPos, fc)) <= 0) return;
+        // split large faces so the depth sort stays correct
+        var ex = Math.hypot(e1[0], e1[1], e1[2]), ey = Math.hypot(e2[0], e2[1], e2[2]);
+        var nx = Math.max(1, Math.min(10, Math.ceil(ex / 300))), ny = Math.max(1, Math.min(10, Math.ceil(ey / 300)));
+        for (var i = 0; i < nx; i++) for (var j = 0; j < ny; j++) {
+          var u0 = i / nx, u1 = (i + 1) / nx, w0 = j / ny, w1 = (j + 1) / ny;
+          function pt(u, w) { var A = [v[0][0] + (v[1][0] - v[0][0]) * u, v[0][1] + (v[1][1] - v[0][1]) * u, v[0][2] + (v[1][2] - v[0][2]) * u];
+            return [A[0] + (v[3][0] - v[0][0]) * w, A[1] + (v[3][1] - v[0][1]) * w, A[2] + (v[3][2] - v[0][2]) * w]; }
+          var q = [pt(u0, w0), pt(u1, w0), pt(u1, w1), pt(u0, w1)];
+          var mid = [(q[0][0] + q[2][0]) / 2, (q[0][1] + q[2][1]) / 2, (q[0][2] + q[2][2]) / 2];
+          var d = sub(mid, camPos);
+          list.push({ q: q, d: d[0] * d[0] + d[1] * d[1] + d[2] * d[2], col: shade(col, n), door: p.door, e: [j === 0, i === nx - 1, j === ny - 1, i === 0] });
+        }
+      });
+    });
+    list.sort(function (a, b) { return b.d - a.d; });
+    ctx.lineJoin = 'round';
+    var ec = 'rgba(' + pal.edge.join(',') + ',0.55)';
+    for (var k = 0; k < list.length; k++) {
+      var f = list[k], pp = f.q.map(proj);
+      ctx.beginPath(); ctx.moveTo(pp[0][0], pp[0][1]);
+      for (var m = 1; m < 4; m++) ctx.lineTo(pp[m][0], pp[m][1]);
+      ctx.closePath(); ctx.fillStyle = f.col; ctx.fill();
+      ctx.strokeStyle = f.col; ctx.lineWidth = 0.8; ctx.stroke();
+      ctx.strokeStyle = ec; ctx.lineWidth = 0.8;
+      for (var m2 = 0; m2 < 4; m2++) if (f.e[m2]) { ctx.beginPath(); ctx.moveTo(pp[m2][0], pp[m2][1]); ctx.lineTo(pp[(m2 + 1) % 4][0], pp[(m2 + 1) % 4][1]); ctx.stroke(); }
+      if (f.door >= 0) { var rec = doorFront[f.door] || (doorFront[f.door] = []); rec.push({ p: pp, d: f.d }); }
+    }
+  }
+  function drawRoom() {
+    var wc = 'rgb(' + pal.wall.join(',') + ')', fl = 'rgb(' + pal.floor.join(',') + ')';
+    function poly(pts, col) { var p = pts.map(proj); ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]); for (var i = 1; i < p.length; i++) ctx.lineTo(p[i][0], p[i][1]); ctx.closePath(); ctx.fillStyle = col; ctx.fill(); }
+    poly([[-900, 0, 0], [2400, 0, 0], [2400, 2450, 0], [-900, 2450, 0]], wc);
+    poly([[-900, 0, 0], [2400, 0, 0], [2400, 0, 1700], [-900, 0, 1700]], fl);
+    // ceiling line
+    var a = proj([-900, 2450, 0]), b = proj([2400, 2450, 0]);
+    ctx.setLineDash([8, 6]); ctx.strokeStyle = 'rgba(' + pal.edge.join(',') + ',0.5)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.setLineDash([]);
+    ctx.font = '11px ui-monospace, Menlo, monospace'; ctx.fillStyle = 'rgba(' + pal.edge.join(',') + ',0.8)';
+    ctx.fillText('tavan 2450', Math.min(b[0], W - 90) - 60, b[1] - 6);
+  }
+
+  // ---------------------------------------------------------------- interaction
+  var ptrs = {}, last = null, moved = 0, pinch = 0;
+  cv.addEventListener('pointerdown', function (e) { cv.setPointerCapture(e.pointerId); ptrs[e.pointerId] = [e.clientX, e.clientY]; moved = 0; });
+  cv.addEventListener('pointermove', function (e) {
+    var p = ptrs[e.pointerId]; if (!p) return;
+    var ids = Object.keys(ptrs);
+    if (ids.length === 2) {
+      var o = ptrs[ids[0] == e.pointerId ? ids[1] : ids[0]], nd = Math.hypot(e.clientX - o[0], e.clientY - o[1]), od = Math.hypot(p[0] - o[0], p[1] - o[1]);
+      if (od > 0) cam.dist = Math.min(9000, Math.max(1500, cam.dist * od / Math.max(nd, 1)));
+      moved += 10;
+    } else {
+      var dx = e.clientX - p[0], dy = e.clientY - p[1]; moved += Math.abs(dx) + Math.abs(dy);
+      cam.yaw -= dx * 0.008; cam.pitch = Math.max(-0.2, Math.min(1.3, cam.pitch + dy * 0.006));
+    }
+    ptrs[e.pointerId] = [e.clientX, e.clientY]; draw();
+  });
+  function up(e) {
+    var wasClick = ptrs[e.pointerId] && moved < 6 && Object.keys(ptrs).length === 1;
+    delete ptrs[e.pointerId];
+    if (wasClick) clickAt(e);
+  }
+  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', function (e) { delete ptrs[e.pointerId]; });
+  cv.addEventListener('wheel', function (e) { e.preventDefault(); cam.dist = Math.min(9000, Math.max(1500, cam.dist * (1 + e.deltaY * 0.001))); draw(); }, { passive: false });
+  function inside(poly, x, y) {
+    var c = false;
+    for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      if (((poly[i][1] > y) !== (poly[j][1] > y)) && (x < (poly[j][0] - poly[i][0]) * (y - poly[i][1]) / (poly[j][1] - poly[i][1]) + poly[i][0])) c = !c;
+    }
+    return c;
+  }
+  function clickAt(e) {
+    var r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, best = -1, bd = 1e18;
+    doorFront.forEach(function (fs, i) { if (!fs) return; fs.forEach(function (f) { if (inside(f.p, x, y) && f.d < bd) { bd = f.d; best = i; } }); });
+    if (best >= 0) { tgt[best] = tgt[best] ? 0 : OPEN; anim(); }
+  }
+  var raf = 0;
+  function anim() {
+    if (raf) return;
+    (function step() {
+      var busy = false;
+      for (var i = 0; i < 4; i++) { var d = tgt[i] - ang[i]; if (Math.abs(d) > 0.002) { ang[i] += d * 0.16; busy = true; } else ang[i] = tgt[i]; }
+      draw();
+      raf = busy ? requestAnimationFrame(step) : 0;
+    })();
+  }
+  function setPressed(id, on) { document.getElementById(id).setAttribute('aria-pressed', on ? 'true' : 'false'); }
+  document.getElementById('b-doors').addEventListener('click', function () {
+    var open = tgt.some(function (t) { return t > 0; });
+    tgt = open ? [0, 0, 0, 0] : [OPEN, OPEN, OPEN, OPEN];
+    st.hide = false; setPressed('b-hide', false); setPressed('b-doors', !open); this.textContent = open ? 'Deschide ușile' : 'Închide ușile'; anim();
+  });
+  document.getElementById('b-hide').addEventListener('click', function () { st.hide = !st.hide; setPressed('b-hide', st.hide); draw(); });
+  document.getElementById('b-pfl').addEventListener('click', function () { st.pfl = !st.pfl; setPressed('b-pfl', st.pfl); draw(); });
+  document.getElementById('b-wall').addEventListener('click', function () { st.wall = !st.wall; setPressed('b-wall', st.wall); draw(); });
+  document.getElementById('gap').addEventListener('input', function () { st.gap = +this.value; draw(); });
+  function view(y, p, d) { cam.yaw = y; cam.pitch = p; cam.dist = d; draw(); }
+  document.getElementById('v-front').addEventListener('click', function () { view(0, 0.04, 4600); });
+  document.getElementById('v-iso').addEventListener('click', function () { view(0.55, 0.22, 4300); });
+  document.getElementById('v-side').addEventListener('click', function () { view(1.45, 0.06, 4600); });
+  window.addEventListener('resize', resize);
+  if (window.ResizeObserver) new ResizeObserver(resize).observe(stage);
+  resize();
+})();
+</script>
+</body>
+</html>

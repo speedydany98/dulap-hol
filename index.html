@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dulap hol 1500×2360</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500&family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: fișă tehnică de atelier. Bloc de titlu, fațada și secțiunile alăturate, apoi tabele. */
+:root {
+  --bg: #EDF0EE; --sheet: #F8FAF9; --ink: #1B2730; --ink2: #4F5D67; --line: #8A97A0; --rule: #CDD5D9;
+  --pal: #C6D0CC; --plinth: #A9B6B1; --door: #EEF0EC; --panel: #DCE3DD; --back: #E3E9E6;
+  --dim: #0B6670; --hw: #B0630A;
+  --f-disp: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --f-body: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11171B; --sheet: #171F25; --ink: #E3E9ED; --ink2: #98A6B0; --line: #5C6A74; --rule: #2A353D;
+    --pal: #3A4947; --plinth: #2C3836; --door: #212C31; --panel: #2A373B; --back: #0F1519;
+    --dim: #58C4CB; --hw: #E5A24E; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #11171B; --sheet: #171F25; --ink: #E3E9ED; --ink2: #98A6B0; --line: #5C6A74; --rule: #2A353D;
+  --pal: #3A4947; --plinth: #2C3836; --door: #212C31; --panel: #2A373B; --back: #0F1519;
+  --dim: #58C4CB; --hw: #E5A24E; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink); font: 400 15px/1.55 var(--f-body);
+  padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 40px; }
+.kicker { font: 500 12px var(--f-mono); letter-spacing: .09em; text-transform: uppercase; color: var(--ink2); }
+h1 { margin: 6px 0 18px; font: 600 clamp(44px, 8vw, 76px)/.92 var(--f-disp); letter-spacing: -.005em; text-wrap: balance; }
+.spec { display: flex; flex-wrap: wrap; gap: 14px 36px; margin: 0; padding: 14px 0 0; border-top: 1px solid var(--ink); }
+.spec div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.spec dt { font: 500 11px var(--f-mono); letter-spacing: .09em; text-transform: uppercase; color: var(--ink2); }
+.spec dd { margin: 0; font: 500 24px/1.1 var(--f-disp); letter-spacing: .01em; }
+h2 { margin: 0; font: 600 21px/1.2 var(--f-disp); letter-spacing: .06em; text-transform: uppercase; }
+.sec-h { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-bottom: 12px; }
+.figs { display: grid; grid-template-columns: minmax(0, 612fr) minmax(0, 440fr); gap: 20px; align-items: start; }
+.sheet { background: var(--sheet); border: 1px solid var(--rule); padding: 14px 14px 16px; min-width: 0; }
+.scroll { overflow-x: auto; }
+.scroll svg { display: block; width: 100%; height: auto; }
+#front { min-width: 520px; }
+#side { min-width: 400px; }
+.cap { margin: 10px 0 0; font-size: 13px; color: var(--ink2); max-width: 65ch; }
+.ctl { display: flex; flex-wrap: wrap; gap: 6px; }
+.ctl button { font: 500 12px var(--f-mono); letter-spacing: .04em; color: var(--ink); background: transparent; border: 1px solid var(--line); padding: 6px 12px; cursor: pointer; border-radius: 2px; }
+.ctl button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+.ctl button:focus-visible, a:focus-visible { outline: 2px solid var(--dim); outline-offset: 2px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 12px 0 0; padding: 0; list-style: none; font-size: 13px; color: var(--ink2); }
+.legend li { display: flex; align-items: center; gap: 7px; }
+.sw { width: 16px; height: 11px; border: 1px solid var(--ink); display: inline-block; }
+.sw.pal { background: var(--pal); } .sw.plinth { background: var(--plinth); }
+.sw.door { background: var(--door); } .sw.panel { background: var(--panel); }
+.sw.hw { background: var(--hw); border-color: var(--hw); border-radius: 50%; width: 11px; }
+.sw.rod { height: 0; border: 0; border-top: 3px solid var(--hw); border-radius: 2px; }
+svg text { font-family: var(--f-mono); fill: var(--ink2); font-size: 10px; }
+svg .lbl { font-size: 10px; }
+svg .sm { font-size: 8.5px; }
+svg .mod { font-family: var(--f-disp); font-weight: 600; font-size: 13px; letter-spacing: .08em; fill: var(--ink); }
+svg .hl { stroke: var(--line); stroke-width: .8; }
+.dim line { stroke: var(--dim); stroke-width: .9; }
+.dim line.ext { stroke-width: .5; opacity: .7; }
+.dim text { fill: var(--dim); font-size: 10.5px; }
+.dim text.sm { font-size: 8.5px; }
+.ceil { stroke: var(--line); stroke-width: .8; stroke-dasharray: 6 4; }
+.floor { stroke: var(--ink); stroke-width: 1.4; }
+.wallline { stroke: var(--ink); stroke-width: 1.2; }
+.pal { fill: var(--pal); stroke: var(--ink); stroke-width: .9; }
+.plinth { fill: var(--plinth); stroke: var(--ink); stroke-width: .6; }
+.back { fill: var(--back); stroke: var(--line); stroke-width: .5; }
+.panel { fill: var(--panel); stroke: var(--ink); stroke-width: .9; }
+.door { fill: var(--door); stroke: var(--ink); stroke-width: 1; }
+.ghost { fill: none; stroke: var(--line); stroke-width: .8; stroke-dasharray: 5 4; }
+.swing { fill: none; stroke: var(--dim); stroke-width: .9; stroke-dasharray: 4 3; }
+.hook { fill: var(--ink); }
+.rod { stroke: var(--hw); stroke-width: 3; stroke-linecap: round; }
+.hwc { fill: var(--hw); fill-opacity: .85; stroke: var(--ink); stroke-width: .6; }
+svg text.hwt { fill: var(--ink); font-size: 9px; font-weight: 500; }
+.face { fill: var(--back); stroke: var(--line); stroke-width: .6; }
+.cut { fill: var(--pal); stroke: var(--ink); stroke-width: 1.1; }
+.doorc { fill: var(--door); stroke: var(--ink); stroke-width: 1.1; }
+.pflc { fill: var(--plinth); stroke: var(--ink); stroke-width: 1; }
+#front:not(.show-doors) #doors { display: none; }
+#front.show-doors #ghost { display: none; }
+#front:not(.show-hw) #hinges { display: none; }
+.block { display: grid; gap: 14px; min-width: 0; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--rule); }
+thead th { font: 500 11px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink2); border-bottom: 1px solid var(--ink); white-space: nowrap; }
+td.n, th.n { text-align: right; font-family: var(--f-mono); font-size: 13px; }
+td.c { font-family: var(--f-mono); font-size: 12px; color: var(--ink2); white-space: nowrap; }
+tr.grp th { padding-top: 16px; font: 600 15px var(--f-disp); letter-spacing: .07em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--line); }
+tr.tot td { font-weight: 500; border-bottom: 0; border-top: 1px solid var(--ink); }
+.note { margin: 0; color: var(--ink2); font-size: 14px; max-width: 70ch; }
+.checks { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; max-width: 72ch; }
+.checks li { padding-left: 16px; position: relative; }
+.checks li::before { content: ""; position: absolute; left: 0; top: .62em; width: 7px; height: 7px; background: var(--hw); }
+.checks b { font-weight: 500; }
+.docs { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.docs a { display: inline-block; padding: 10px 14px; border: 1px solid var(--ink); color: var(--ink); text-decoration: none; font: 500 14px var(--f-mono); }
+.docs a:hover { background: var(--ink); color: var(--sheet); }
+@media (max-width: 900px) { .figs { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Casa cumnata · cote în mm</div>
+  <h1>Dulap hol</h1>
+  <dl class="spec">
+    <div><dt>Lățime</dt><dd>1500</dd></div>
+    <div><dt>Înălțime</dt><dd>2360</dd></div>
+    <div><dt>Adâncime</dt><dd>503</dd></div>
+    <div><dt>Module</dt><dd>3 × 500</dd></div>
+    <div><dt>Carcasă și uși</dt><dd>PAL 18 uni</dd></div>
+    <div><dt>Spate</dt><dd>PFL 3</dd></div>
+  </dl>
+</header>
+
+<section class="figs" aria-label="Desene">
+  <div class="sheet">
+    <div class="sec-h">
+      <h2>Fațadă</h2>
+      <div class="ctl" role="group" aria-label="Vedere">
+        <button type="button" id="b-int" aria-pressed="true">Interior</button>
+        <button type="button" id="b-door" aria-pressed="false">Uși</button>
+        <button type="button" id="b-hw" aria-pressed="false">Balamale</button>
+      </div>
+    </div>
+    <div class="scroll"><svg id="front" class="drawing" viewBox="0 0 612.0 851.0" role="img" aria-label="Fațada dulapului de hol, 1500 pe 2360 mm, cu cele trei module"><defs><pattern id="hF" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line class="hl" x1="0" y1="0" x2="0" y2="5"/></pattern></defs><line class="ceil" x1="82" y1="26.0" x2="552.0" y2="26.0"/><text class="lbl sm" x="542.0" y="20.0" text-anchor="end">tavan · 2450</text><rect x="82" y="761.0" width="470.0" height="7" fill="url(#hF)"/><line class="floor" x1="82" y1="761.0" x2="552.0" y2="761.0"/><g id="interior"><rect class="back" x="97.4" y="58.4" width="139.2" height="679.2"/><rect class="pal" x="92.0" y="53.0" width="5.4" height="708.0"/><rect class="pal" x="236.6" y="53.0" width="5.4" height="708.0"/><rect class="plinth" x="97.4" y="743.0" width="139.2" height="18.0"/><rect class="pal" x="97.4" y="737.6" width="139.2" height="5.4"/><rect class="pal" x="97.4" y="53.0" width="139.2" height="5.4"/><rect class="pal" x="97.4" y="133.4" width="139.2" height="5.4"/><line class="rod" x1="105.5" y1="155.0" x2="228.5" y2="155.0"/><line class="rod" x1="105.5" y1="443.0" x2="228.5" y2="443.0"/><text class="lbl" x="167.0" y="109.4" text-anchor="middle">poliță fixă · 250 utili</text><text class="lbl sm" x="167.0" y="172.0" text-anchor="middle">bară sus</text><text class="lbl sm" x="167.0" y="460.0" text-anchor="middle">bară jos</text><rect class="back" x="247.4" y="58.4" width="139.2" height="679.2"/><rect class="pal" x="242.0" y="53.0" width="5.4" height="708.0"/><rect class="pal" x="386.6" y="53.0" width="5.4" height="708.0"/><rect class="plinth" x="247.4" y="743.0" width="139.2" height="18.0"/><rect class="pal" x="247.4" y="737.6" width="139.2" height="5.4"/><rect class="pal" x="247.4" y="53.0" width="139.2" height="5.4"/><rect class="pal" x="247.4" y="665.45" width="139.2" height="5.4"/><rect class="pal" x="247.4" y="588.65" width="139.2" height="5.4"/><rect class="pal" x="247.4" y="511.85" width="139.2" height="5.4"/><rect class="pal" x="247.4" y="435.05" width="139.2" height="5.4"/><rect class="pal" x="247.4" y="358.25" width="139.2" height="5.4"/><rect class="pal" x="247.4" y="281.45" width="139.2" height="5.4"/><rect class="pal" x="247.4" y="204.65" width="139.2" height="5.4"/><rect class="pal" x="247.4" y="127.85" width="139.2" height="5.4"/><text class="lbl sm" x="317.0" y="707.23" text-anchor="middle">222</text><text class="lbl sm" x="317.0" y="632.75" text-anchor="middle">238</text><text class="lbl sm" x="317.0" y="555.95" text-anchor="middle">238</text><text class="lbl sm" x="317.0" y="479.15" text-anchor="middle">238</text><text class="lbl sm" x="317.0" y="402.35" text-anchor="middle">238</text><text class="lbl sm" x="317.0" y="325.55" text-anchor="middle">238</text><text class="lbl sm" x="317.0" y="248.75" text-anchor="middle">238</text><text class="lbl sm" x="317.0" y="171.95" text-anchor="middle">238</text><text class="lbl sm" x="317.0" y="96.12" text-anchor="middle">232</text><rect class="back" x="397.4" y="628.4" width="139.2" height="109.2"/><rect class="pal" x="392.0" y="623.0" width="5.4" height="138.0"/><rect class="pal" x="536.6" y="623.0" width="5.4" height="138.0"/><rect class="plinth" x="397.4" y="743.0" width="139.2" height="18.0"/><rect class="pal" x="397.4" y="737.6" width="139.2" height="5.4"/><rect class="pal" x="397.4" y="623.0" width="139.2" height="5.4"/><text class="lbl" x="467.0" y="686.0" text-anchor="middle">gol util 364</text><rect class="panel" x="392.0" y="233.0" width="150.0" height="390.0"/><text class="lbl" x="467.0" y="446.0" text-anchor="middle">panou cuier</text><text class="lbl sm" x="467.0" y="458.0" text-anchor="middle">1300 × 500</text><circle class="hook" cx="429.5" cy="293.0" r="2.6"/><circle class="hook" cx="467.0" cy="293.0" r="2.6"/><circle class="hook" cx="504.5" cy="293.0" r="2.6"/><rect class="back" x="397.4" y="58.4" width="139.2" height="169.2"/><rect class="pal" x="392.0" y="53.0" width="5.4" height="180.0"/><rect class="pal" x="536.6" y="53.0" width="5.4" height="180.0"/><rect class="pal" x="397.4" y="227.6" width="139.2" height="5.4"/><rect class="pal" x="397.4" y="53.0" width="139.2" height="5.4"/><text class="lbl" x="467.0" y="146.0" text-anchor="middle">gol util 564</text></g><g id="ghost"><rect class="ghost" x="92.6" y="53.6" width="148.8" height="688.8"/><rect class="ghost" x="242.6" y="53.6" width="148.8" height="688.8"/><rect class="ghost" x="392.6" y="629.0" width="148.8" height="113.4"/><rect class="ghost" x="392.6" y="53.6" width="148.8" height="178.8"/></g><g id="doors"><rect class="door" x="92.6" y="53.6" width="148.8" height="688.8"/><rect class="door" x="242.6" y="53.6" width="148.8" height="688.8"/><rect class="door" x="392.6" y="629.0" width="148.8" height="113.4"/><rect class="door" x="392.6" y="53.6" width="148.8" height="178.8"/><polyline class="swing" points="241.4,742.4 92.6,398.0 241.4,53.6"/><polyline class="swing" points="391.4,742.4 242.6,398.0 391.4,53.6"/><polyline class="swing" points="541.4,742.4 392.6,685.7 541.4,629.0"/><polyline class="swing" points="541.4,232.4 392.6,143.0 541.4,53.6"/></g><g id="hinges"><circle class="hwc" cx="99.2" cy="705.2" r="5"/><text class="hwt" x="108.2" y="708.2" text-anchor="start">186</text><circle class="hwc" cx="99.2" cy="551.6" r="5"/><text class="hwt" x="108.2" y="554.6" text-anchor="start">698</text><circle class="hwc" cx="99.2" cy="398.0" r="5"/><text class="hwt" x="108.2" y="401.0" text-anchor="start">1210</text><circle class="hwc" cx="99.2" cy="244.4" r="5"/><text class="hwt" x="108.2" y="247.4" text-anchor="start">1722</text><circle class="hwc" cx="99.2" cy="90.8" r="5"/><text class="hwt" x="108.2" y="93.8" text-anchor="start">2234</text><circle class="hwc" cx="249.2" cy="705.2" r="5"/><text class="hwt" x="258.2" y="708.2" text-anchor="start">186</text><circle class="hwc" cx="249.2" cy="551.6" r="5"/><text class="hwt" x="258.2" y="554.6" text-anchor="start">698</text><circle class="hwc" cx="249.2" cy="398.0" r="5"/><text class="hwt" x="258.2" y="401.0" text-anchor="start">1210</text><circle class="hwc" cx="249.2" cy="244.4" r="5"/><text class="hwt" x="258.2" y="247.4" text-anchor="start">1722</text><circle class="hwc" cx="249.2" cy="90.8" r="5"/><text class="hwt" x="258.2" y="93.8" text-anchor="start">2234</text><circle class="hwc" cx="399.2" cy="714.5" r="5"/><text class="hwt" x="408.2" y="717.5" text-anchor="start">155</text><circle class="hwc" cx="399.2" cy="656.9" r="5"/><text class="hwt" x="408.2" y="659.9" text-anchor="start">347</text><circle class="hwc" cx="399.2" cy="205.4" r="5"/><text class="hwt" x="408.2" y="208.4" text-anchor="start">1852</text><circle class="hwc" cx="399.2" cy="80.6" r="5"/><text class="hwt" x="408.2" y="83.6" text-anchor="start">2268</text></g><g class="dim"><line x1="92.0" y1="787.0" x2="242.0" y2="787.0"/><line x1="89.5" y1="789.5" x2="94.5" y2="784.5"/><line class="ext" x1="92.0" y1="770.0" x2="92.0" y2="790.0"/><line x1="239.5" y1="789.5" x2="244.5" y2="784.5"/><line class="ext" x1="242.0" y1="770.0" x2="242.0" y2="790.0"/><text x="167.0" y="783.0" text-anchor="middle">500</text></g><g class="dim"><line x1="242.0" y1="787.0" x2="392.0" y2="787.0"/><line x1="239.5" y1="789.5" x2="244.5" y2="784.5"/><line class="ext" x1="242.0" y1="770.0" x2="242.0" y2="790.0"/><line x1="389.5" y1="789.5" x2="394.5" y2="784.5"/><line class="ext" x1="392.0" y1="770.0" x2="392.0" y2="790.0"/><text x="317.0" y="783.0" text-anchor="middle">500</text></g><g class="dim"><line x1="392.0" y1="787.0" x2="542.0" y2="787.0"/><line x1="389.5" y1="789.5" x2="394.5" y2="784.5"/><line class="ext" x1="392.0" y1="770.0" x2="392.0" y2="790.0"/><line x1="539.5" y1="789.5" x2="544.5" y2="784.5"/><line class="ext" x1="542.0" y1="770.0" x2="542.0" y2="790.0"/><text x="467.0" y="783.0" text-anchor="middle">500</text></g><g class="dim"><line x1="92.0" y1="809.0" x2="542.0" y2="809.0"/><line x1="89.5" y1="811.5" x2="94.5" y2="806.5"/><line class="ext" x1="92.0" y1="791.0" x2="92.0" y2="812.0"/><line x1="539.5" y1="811.5" x2="544.5" y2="806.5"/><line class="ext" x1="542.0" y1="791.0" x2="542.0" y2="812.0"/><text x="317.0" y="805.0" text-anchor="middle">1500</text></g><text class="mod" x="167.0" y="839.0" text-anchor="middle">1 · HAINE</text><text class="mod" x="317.0" y="839.0" text-anchor="middle">2 · PANTOFAR</text><text class="mod" x="467.0" y="839.0" text-anchor="middle">3 · BANCĂ · CUIER · SUSPENDAT</text><g class="dim"><line x1="58" y1="761.0" x2="58" y2="53.0"/><line x1="55.5" y1="763.5" x2="60.5" y2="758.5"/><line class="ext" x1="88.0" y1="761.0" x2="55" y2="761.0"/><line x1="55.5" y1="55.5" x2="60.5" y2="50.5"/><line class="ext" x1="88.0" y1="53.0" x2="55" y2="53.0"/><text x="54" y="407.0" text-anchor="middle" transform="rotate(-90 54 407.0)">2360</text></g><g class="dim"><line x1="58" y1="53.0" x2="58" y2="26.0"/><line x1="55.5" y1="55.5" x2="60.5" y2="50.5"/><line class="ext" x1="88.0" y1="53.0" x2="55" y2="53.0"/><line x1="55.5" y1="28.5" x2="60.5" y2="23.5"/><line class="ext" x1="88.0" y1="26.0" x2="55" y2="26.0"/><text x="54" y="39.5" text-anchor="middle" transform="rotate(-90 54 39.5)">90</text></g><g class="dim"><line x1="568.0" y1="761.0" x2="568.0" y2="623.0"/><line x1="565.5" y1="763.5" x2="570.5" y2="758.5"/><line class="ext" x1="546.0" y1="761.0" x2="571.0" y2="761.0"/><line x1="565.5" y1="625.5" x2="570.5" y2="620.5"/><line class="ext" x1="546.0" y1="623.0" x2="571.0" y2="623.0"/><text x="580.0" y="692.0" text-anchor="middle" transform="rotate(-90 580.0 692.0)">460</text></g><g class="dim"><line x1="568.0" y1="623.0" x2="568.0" y2="233.0"/><line x1="565.5" y1="625.5" x2="570.5" y2="620.5"/><line class="ext" x1="546.0" y1="623.0" x2="571.0" y2="623.0"/><line x1="565.5" y1="235.5" x2="570.5" y2="230.5"/><line class="ext" x1="546.0" y1="233.0" x2="571.0" y2="233.0"/><text x="580.0" y="428.0" text-anchor="middle" transform="rotate(-90 580.0 428.0)">1300</text></g><g class="dim"><line x1="568.0" y1="233.0" x2="568.0" y2="53.0"/><line x1="565.5" y1="235.5" x2="570.5" y2="230.5"/><line class="ext" x1="546.0" y1="233.0" x2="571.0" y2="233.0"/><line x1="565.5" y1="55.5" x2="570.5" y2="50.5"/><line class="ext" x1="546.0" y1="53.0" x2="571.0" y2="53.0"/><text x="580.0" y="143.0" text-anchor="middle" transform="rotate(-90 580.0 143.0)">600</text></g></svg></div>
+    <ul class="legend">
+      <li><span class="sw pal"></span>laterală, capac, poliță</li>
+      <li><span class="sw plinth"></span>plintă față, la ras</li>
+      <li><span class="sw door"></span>ușă</li>
+      <li><span class="sw panel"></span>panou cuier</li>
+      <li><span class="sw rod"></span>bară umerașe</li>
+      <li><span class="sw hw"></span>axă plăcuță balama</li>
+    </ul>
+    <p class="cap">Toate balamalele sunt pe stânga. Triunghiul punctat arată sensul de deschidere: vârful stă pe latura cu balamale. Cifrele din goluri sunt înălțimile utile. Barele de umerașe și cârligele sunt la poziții orientative. Nu sunt mânere în proiect.</p>
+  </div>
+
+  <div class="sheet">
+    <div class="sec-h"><h2>Secțiuni laterale</h2></div>
+    <div class="scroll"><svg id="side" class="drawing" viewBox="0 0 444.78 757.0" role="img" aria-label="Secțiuni laterale prin modulul 2 și prin modulul 3"><defs><pattern id="hS" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line class="hl" x1="0" y1="0" x2="0" y2="5"/></pattern></defs><rect x="16" y="22.0" width="14" height="637.0" fill="url(#hS)"/><line class="wallline" x1="30" y1="22.0" x2="30" y2="659.0"/><line class="ceil" x1="16" y1="22.0" x2="174.78" y2="22.0"/><rect x="16" y="659.0" width="158.78" height="7" fill="url(#hS)"/><line class="floor" x1="16" y1="659.0" x2="174.78" y2="659.0"/><text class="lbl sm" x="174.78" y="17.0" text-anchor="end">tavan</text><g class="dim"><line x1="30.0" y1="683.0" x2="160.78" y2="683.0"/><line x1="27.5" y1="685.5" x2="32.5" y2="680.5"/><line class="ext" x1="30.0" y1="668.0" x2="30.0" y2="686.0"/><line x1="158.28" y1="685.5" x2="163.28" y2="680.5"/><line class="ext" x1="160.78" y1="668.0" x2="160.78" y2="686.0"/><text x="95.39" y="679.0" text-anchor="middle">503</text></g><text class="lbl sm" x="95.39" y="703.0" text-anchor="middle">3 PFL · 480 carcasă · 2 luft · 18 ușă</text><rect class="face" x="30.78" y="45.4" width="124.8" height="613.6"/><rect class="pflc" x="30.0" y="45.92" width="0.78" height="612.56"/><rect class="cut" x="150.9" y="643.4" width="4.68" height="15.6"/><rect class="cut" x="30.78" y="638.72" width="124.8" height="4.68"/><rect class="cut" x="30.78" y="45.4" width="124.8" height="4.68"/><rect class="cut" x="35.98" y="576.19" width="114.4" height="4.68"/><rect class="cut" x="35.98" y="509.63" width="114.4" height="4.68"/><rect class="cut" x="35.98" y="443.07" width="114.4" height="4.68"/><rect class="cut" x="35.98" y="376.51" width="114.4" height="4.68"/><rect class="cut" x="35.98" y="309.95" width="114.4" height="4.68"/><rect class="cut" x="35.98" y="243.39" width="114.4" height="4.68"/><rect class="cut" x="35.98" y="176.83" width="114.4" height="4.68"/><rect class="cut" x="35.98" y="110.27" width="114.4" height="4.68"/><rect class="doorc" x="156.1" y="45.92" width="4.68" height="596.96"/><g class="dim"><line x1="35.98" y1="80.18" x2="150.38" y2="80.18"/><line x1="33.48" y1="82.68" x2="38.48" y2="77.68"/><line x1="147.88" y1="82.68" x2="152.88" y2="77.68"/><text x="93.18" y="76.18" text-anchor="middle">440</text></g><g class="dim"><line x1="150.38" y1="94.18" x2="155.58" y2="94.18"/><line x1="147.88" y1="96.68" x2="152.88" y2="91.68"/><line x1="153.08" y1="96.68" x2="158.08" y2="91.68"/><text class="sm" x="152.98" y="90.18" text-anchor="middle">20</text></g><g class="dim"><line x1="182.78" y1="659.0" x2="182.78" y2="45.4"/><line x1="180.28" y1="661.5" x2="185.28" y2="656.5"/><line class="ext" x1="164.78" y1="659.0" x2="185.78" y2="659.0"/><line x1="180.28" y1="47.9" x2="185.28" y2="42.9"/><line class="ext" x1="164.78" y1="45.4" x2="185.78" y2="45.4"/><text x="194.78" y="352.2" text-anchor="middle" transform="rotate(-90 194.78 352.2)">2360</text></g><text class="mod" x="95.0" y="731.0" text-anchor="middle">A · MODUL 2</text><text class="lbl" x="95.0" y="745.0" text-anchor="middle">Pantofar</text><rect x="230" y="22.0" width="14" height="637.0" fill="url(#hS)"/><line class="wallline" x1="244" y1="22.0" x2="244" y2="659.0"/><line class="ceil" x1="230" y1="22.0" x2="388.78" y2="22.0"/><rect x="230" y="659.0" width="158.78" height="7" fill="url(#hS)"/><line class="floor" x1="230" y1="659.0" x2="388.78" y2="659.0"/><text class="lbl sm" x="388.78" y="17.0" text-anchor="end">tavan</text><g class="dim"><line x1="244.0" y1="683.0" x2="374.78" y2="683.0"/><line x1="241.5" y1="685.5" x2="246.5" y2="680.5"/><line class="ext" x1="244.0" y1="668.0" x2="244.0" y2="686.0"/><line x1="372.28" y1="685.5" x2="377.28" y2="680.5"/><line class="ext" x1="374.78" y1="668.0" x2="374.78" y2="686.0"/><text x="309.39" y="679.0" text-anchor="middle">503</text></g><text class="lbl sm" x="309.39" y="703.0" text-anchor="middle">3 PFL · 480 carcasă · 2 luft · 18 ușă</text><rect class="face" x="244.78" y="539.4" width="124.8" height="119.6"/><rect class="face" x="244.78" y="45.4" width="124.8" height="156.0"/><rect class="pflc" x="244.0" y="539.92" width="0.78" height="118.56"/><rect class="pflc" x="244.0" y="45.92" width="0.78" height="154.96"/><rect class="cut" x="364.9" y="643.4" width="4.68" height="15.6"/><rect class="cut" x="244.78" y="638.72" width="124.8" height="4.68"/><rect class="cut" x="244.78" y="539.4" width="124.8" height="4.68"/><rect class="doorc" x="370.1" y="544.6" width="4.68" height="98.28"/><rect class="cut" x="244.0" y="201.4" width="4.68" height="338.0"/><rect class="cut" x="244.78" y="196.72" width="124.8" height="4.68"/><rect class="cut" x="244.78" y="45.4" width="124.8" height="4.68"/><rect class="doorc" x="370.1" y="45.92" width="4.68" height="154.96"/><text class="lbl" x="311.6" y="370.4" text-anchor="middle">panou cuier</text><text class="lbl sm" x="311.6" y="382.4" text-anchor="middle">18 mm, pe perete</text><text class="lbl sm" x="311.6" y="594.4" text-anchor="middle">bancă</text><text class="lbl sm" x="311.6" y="126.4" text-anchor="middle">suspendat</text><g class="dim"><line x1="396.78" y1="659.0" x2="396.78" y2="539.4"/><line x1="394.28" y1="661.5" x2="399.28" y2="656.5"/><line class="ext" x1="378.78" y1="659.0" x2="399.78" y2="659.0"/><line x1="394.28" y1="541.9" x2="399.28" y2="536.9"/><line class="ext" x1="378.78" y1="539.4" x2="399.78" y2="539.4"/><text x="408.78" y="599.2" text-anchor="middle" transform="rotate(-90 408.78 599.2)">460</text></g><g class="dim"><line x1="396.78" y1="539.4" x2="396.78" y2="201.4"/><line x1="394.28" y1="541.9" x2="399.28" y2="536.9"/><line class="ext" x1="378.78" y1="539.4" x2="399.78" y2="539.4"/><line x1="394.28" y1="203.9" x2="399.28" y2="198.9"/><line class="ext" x1="378.78" y1="201.4" x2="399.78" y2="201.4"/><text x="408.78" y="370.4" text-anchor="middle" transform="rotate(-90 408.78 370.4)">1300</text></g><g class="dim"><line x1="396.78" y1="201.4" x2="396.78" y2="45.4"/><line x1="394.28" y1="203.9" x2="399.28" y2="198.9"/><line class="ext" x1="378.78" y1="201.4" x2="399.78" y2="201.4"/><line x1="394.28" y1="47.9" x2="399.28" y2="42.9"/><line class="ext" x1="378.78" y1="45.4" x2="399.78" y2="45.4"/><text x="408.78" y="123.4" text-anchor="middle" transform="rotate(-90 408.78 123.4)">600</text></g><g class="dim"><line x1="420.78" y1="659.0" x2="420.78" y2="45.4"/><line x1="418.28" y1="661.5" x2="423.28" y2="656.5"/><line class="ext" x1="378.78" y1="659.0" x2="423.78" y2="659.0"/><line x1="418.28" y1="47.9" x2="423.28" y2="42.9"/><line class="ext" x1="378.78" y1="45.4" x2="423.78" y2="45.4"/><text x="432.78" y="352.2" text-anchor="middle" transform="rotate(-90 432.78 352.2)">2360</text></g><text class="mod" x="309.0" y="731.0" text-anchor="middle">B · MODUL 3</text><text class="lbl" x="309.0" y="745.0" text-anchor="middle">Bancă · cuier · suspendat</text></svg></div>
+    <p class="cap">PFL-ul de 3 mm stă pe spate, lipit de perete. Polițele mobile sunt retrase 20 mm față de fața carcasei. Panoul de cuier stă pe perete, sub suspendat și deasupra băncii.</p>
+  </div>
+</section>
+
+<section class="block">
+  <div class="sec-h"><h2>Balamale</h2></div>
+  <p class="note">Blum CLIP top BLUMOTION 110°, câte 5 pe ușile înalte și câte 2 pe celelalte, toate pe stânga. Axele plăcuțelor sunt pe grila de 32 mm a laterale și simetrice față de mijlocul fiecărei uși. Distanța minimă este de la axa plăcuței la axa celei mai apropiate polițe sau capac/fund; regula de 35 mm e îndeplinită peste tot. K = 3 mm și acoperirea de 16 mm trebuie verificate pe fișa balamalei cumpărate.</p>
+  <div class="scroll"><table><thead><tr><th>Ușă</th><th class="n">Balama</th><th class="n">Axă plăcuță, de la podea</th><th class="n">Cupă, de la marginea de jos a ușii</th><th class="n">Distanță min.</th></tr></thead><tbody><tr><td>Ușă înaltă (corp 1 și 2)</td><td class="n">1</td><td class="n">186</td><td class="n">124</td><td class="n">117</td></tr><tr><td>Ușă înaltă (corp 1 și 2)</td><td class="n">2</td><td class="n">698</td><td class="n">636</td><td class="n">124</td></tr><tr><td>Ușă înaltă (corp 1 și 2)</td><td class="n">3</td><td class="n">1210</td><td class="n">1148</td><td class="n">124</td></tr><tr><td>Ușă înaltă (corp 1 și 2)</td><td class="n">4</td><td class="n">1722</td><td class="n">1660</td><td class="n">124</td></tr><tr><td>Ușă înaltă (corp 1 și 2)</td><td class="n">5</td><td class="n">2234</td><td class="n">2172</td><td class="n">117</td></tr><tr><td>Ușă bancă</td><td class="n">1</td><td class="n">155</td><td class="n">93</td><td class="n">86</td></tr><tr><td>Ușă bancă</td><td class="n">2</td><td class="n">347</td><td class="n">285</td><td class="n">104</td></tr><tr><td>Ușă suspendat</td><td class="n">1</td><td class="n">1852</td><td class="n">90</td><td class="n">83</td></tr><tr><td>Ușă suspendat</td><td class="n">2</td><td class="n">2268</td><td class="n">506</td><td class="n">83</td></tr></tbody></table></div>
+</section>
+
+<section class="block">
+  <div class="sec-h"><h2>Lista de debitare</h2></div>
+  <div class="scroll"><table><thead><tr><th>Cod</th><th>Piesă</th><th class="n">Buc.</th><th class="n">Lung.</th><th class="n">Lăț.</th><th class="n">L1</th><th class="n">L2</th><th class="n">l1</th><th class="n">l2</th></tr></thead><tbody><tr class="grp"><th colspan="9" scope="colgroup">Corp 1 · Haine</th></tr><tr><td class="c">1-LAT</td><td>Laterală</td><td class="n">2</td><td class="n">2360</td><td class="n">480</td><td class="n">0,8</td><td class="n">–</td><td class="n">–</td><td class="n">0,8</td></tr><tr><td class="c">1-CAP</td><td>Capac / fund</td><td class="n">2</td><td class="n">480</td><td class="n">464</td><td class="n">–</td><td class="n">–</td><td class="n">0,8</td><td class="n">–</td></tr><tr><td class="c">1-POL</td><td>Poliță fixă sus</td><td class="n">1</td><td class="n">480</td><td class="n">464</td><td class="n">–</td><td class="n">–</td><td class="n">0,8</td><td class="n">–</td></tr><tr><td class="c">1-PLI</td><td>Plintă față</td><td class="n">1</td><td class="n">464</td><td class="n">60</td><td class="n">0,8</td><td class="n">–</td><td class="n">–</td><td class="n">–</td></tr><tr><td class="c">1-USA</td><td>Ușă</td><td class="n">1</td><td class="n">2296</td><td class="n">496</td><td class="n">2</td><td class="n">2</td><td class="n">2</td><td class="n">2</td></tr><tr class="grp"><th colspan="9" scope="colgroup">Corp 2 · Pantofar</th></tr><tr><td class="c">2-LAT</td><td>Laterală</td><td class="n">2</td><td class="n">2360</td><td class="n">480</td><td class="n">0,8</td><td class="n">–</td><td class="n">–</td><td class="n">0,8</td></tr><tr><td class="c">2-CAP</td><td>Capac / fund</td><td class="n">2</td><td class="n">480</td><td class="n">464</td><td class="n">–</td><td class="n">–</td><td class="n">0,8</td><td class="n">–</td></tr><tr><td class="c">2-POL</td><td>Poliță mobilă (8 + 1 rezervă)</td><td class="n">9</td><td class="n">462</td><td class="n">440</td><td class="n">0,8</td><td class="n">–</td><td class="n">–</td><td class="n">–</td></tr><tr><td class="c">2-PLI</td><td>Plintă față</td><td class="n">1</td><td class="n">464</td><td class="n">60</td><td class="n">0,8</td><td class="n">–</td><td class="n">–</td><td class="n">–</td></tr><tr><td class="c">2-USA</td><td>Ușă</td><td class="n">1</td><td class="n">2296</td><td class="n">496</td><td class="n">2</td><td class="n">2</td><td class="n">2</td><td class="n">2</td></tr><tr class="grp"><th colspan="9" scope="colgroup">Corp 3 · Bancă</th></tr><tr><td class="c">3B-LAT</td><td>Laterală</td><td class="n">2</td><td class="n">460</td><td class="n">480</td><td class="n">0,8</td><td class="n">–</td><td class="n">0,8</td><td class="n">0,8</td></tr><tr><td class="c">3B-SEZ</td><td>Șezut (capac)</td><td class="n">1</td><td class="n">480</td><td class="n">464</td><td class="n">–</td><td class="n">–</td><td class="n">2</td><td class="n">–</td></tr><tr><td class="c">3B-FND</td><td>Fund</td><td class="n">1</td><td class="n">480</td><td class="n">464</td><td class="n">–</td><td class="n">–</td><td class="n">0,8</td><td class="n">–</td></tr><tr><td class="c">3B-PLI</td><td>Plintă față</td><td class="n">1</td><td class="n">464</td><td class="n">60</td><td class="n">0,8</td><td class="n">–</td><td class="n">–</td><td class="n">–</td></tr><tr><td class="c">3B-USA</td><td>Ușă</td><td class="n">1</td><td class="n">496</td><td class="n">378</td><td class="n">2</td><td class="n">2</td><td class="n">2</td><td class="n">2</td></tr><tr class="grp"><th colspan="9" scope="colgroup">Corp 3 · Panou cuier</th></tr><tr><td class="c">3P-PAN</td><td>Panou perete</td><td class="n">1</td><td class="n">1300</td><td class="n">500</td><td class="n">2</td><td class="n">2</td><td class="n">2</td><td class="n">2</td></tr><tr class="grp"><th colspan="9" scope="colgroup">Corp 3 · Suspendat</th></tr><tr><td class="c">3S-LAT</td><td>Laterală</td><td class="n">2</td><td class="n">600</td><td class="n">480</td><td class="n">0,8</td><td class="n">–</td><td class="n">–</td><td class="n">0,8</td></tr><tr><td class="c">3S-CAP</td><td>Capac / fund</td><td class="n">2</td><td class="n">480</td><td class="n">464</td><td class="n">–</td><td class="n">–</td><td class="n">0,8</td><td class="n">–</td></tr><tr><td class="c">3S-USA</td><td>Ușă</td><td class="n">1</td><td class="n">596</td><td class="n">496</td><td class="n">2</td><td class="n">2</td><td class="n">2</td><td class="n">2</td></tr><tr class="tot"><td></td><td>Total</td><td class="n">34</td><td colspan="6"></td></tr></tbody></table></div>
+  <p class="note">Lungime × lățime, PAL 18 mm, cote finite (după cant). L1/L2 sunt muchiile lungi, l1/l2 cele scurte; grosimea cantului în mm. Piesele însumează 12,88 m² din 16,95 m² (3 coli de 2770 × 2040), adică 76%. Spate PFL 3 mm, fără cant: 2 × 2356 × 496, 1 × 456 × 496 și 1 × 596 × 496. Cant 0,8 mm: 25,6 m; cant 2 mm: 19,2 m.</p>
+</section>
+
+<section class="block"><div class="sec-h"><h2>Documente</h2></div><ul class="docs"><li><a href="model-3d-dulap-hol.html">Model 3D (interactiv)</a></li><li><a href="plan-debitare-dulap-hol.pdf">Plan de debitare (PDF, A4)</a></li><li><a href="ghid-asamblare-dulap-hol.pdf">Ghid de asamblare (PDF, A4)</a></li><li><a href="lista-debitare-dulap-hol.xlsx">Listă de debitare (xlsx)</a></li></ul></section>
+
+<section class="block">
+  <div class="sec-h"><h2>De verificat</h2></div>
+  <ul class="checks">
+    <li><b>Fișa balamalei Blum:</b> cupă Ø35, adâncime ~12,5 mm, K ≥ 3 mm, plăcuță la 37 mm de față cu găuri la 32 mm și acoperire 16 mm sunt din cunoștințe generale, nu din fișa produsului.</li>
+    <li><b>Fabrica:</b> confirmă că cotele sunt finite, culoarea PAL, cantul și dimensiunea colii de PFL (presupus 2800 × 2070).</li>
+    <li><b>Ridicarea corpurilor înalte:</b> diagonala cu PFL și fără uși e ≈ 2409 mm, față de tavan 2450. Rămân 41 mm; cu ușă, 37 mm. Măsoară tavanul în locul respectiv.</li>
+    <li><b>Perete și suspendat:</b> tipul peretelui decide diblurile; suporții de suspendare se montează după fișa lor.</li>
+    <li><b>Sarcina polițelor și a barelor</b> nu a fost calculată.</li>
+  </ul>
+</section>
+
+</div>
+
+<script>
+(function () {
+  var s = document.getElementById('front');
+  if (!s) return;
+  var bi = document.getElementById('b-int'), bd = document.getElementById('b-door'), bh = document.getElementById('b-hw');
+  function doors(on) {
+    s.classList.toggle('show-doors', on);
+    bi.setAttribute('aria-pressed', on ? 'false' : 'true');
+    bd.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+  bi.addEventListener('click', function () { doors(false); });
+  bd.addEventListener('click', function () { doors(true); });
+  bh.addEventListener('click', function () {
+    var on = !s.classList.contains('show-hw');
+    s.classList.toggle('show-hw', on);
+    bh.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+})();
+</script>
+</body>
+</html>
